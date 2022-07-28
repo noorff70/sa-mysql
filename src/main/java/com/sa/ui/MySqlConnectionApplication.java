@@ -6,10 +6,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class DisplayUIApplication {
+public class MySqlConnectionApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DisplayUIApplication.class, args);
+		SpringApplication.run(MySqlConnectionApplication.class, args);
 	}
 
 }
