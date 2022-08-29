@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sa.ui.dao.ContentDAO;
 import com.sa.ui.model.Contents;
+import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.service.ContentService;
 
 
@@ -17,16 +18,16 @@ public class ContentServiceImpl implements ContentService{
 	@Autowired
 	private ContentDAO contentDAO;
 	
-	@Override
+	/*@Override
 	public List<Contents> getAllContentsById(long id) {
 
 		return contentDAO.getAllContentsById(id);
-	}
+	}*/
 	
 	@Override
-	public List<Contents> getContentsListByStudentId(long studentId){
+	public List<Contents> getContentsByStudentId(long studentId){
 		
-		return contentDAO.getContentsByContentIdList(studentId);
+		return contentDAO.getContentsByStudentId(studentId);
 		
 	}
 	
@@ -34,9 +35,13 @@ public class ContentServiceImpl implements ContentService{
 		return contentDAO.getContentsListByContentDesc(desc);
 	}
 
-	/*public Boolean insertStudentContent(String userName, long contentId ) {
-		return contentDAO.insertStudentContent(userName, contentId);
-	}*/
+	@Override
+	public UserAccessReturnObject addContentToUser(Long userId, Long contentId) {
+		
+		UserAccessReturnObject userAccessReturnObject =  
+				contentDAO.addContentToUser(userId, Long.valueOf(contentId));
+		return userAccessReturnObject;
+	}
 
 }
 

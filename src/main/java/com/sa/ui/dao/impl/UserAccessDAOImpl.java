@@ -83,12 +83,15 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 		    // check if user exists
 			List<User> userList = jdbcTemplate.query (sql,  new UserRowMapper(), user.getUserName(), user.getPassword());
 			
-			if (userList.size() > 0) {
+			if (userList.size() == 1) {
 				returnObject.setLoginSuccess(true);
 				
+				User dbUser = userList.get(0);
+				
 				Student student = new Student();
-				student.setUserName(user.getUserName());
-				student.setEmail(user.getEmail());
+				student.setUserName(dbUser.getUserName());
+				student.setEmail(dbUser.getEmail());
+				student.setUserId(dbUser.getUserId());
 				
 				returnObject.setStudent(student);
 				return returnObject;
@@ -105,30 +108,3 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 		return returnObject;
 	}
 }
-
-/*
- * 	public List<Contents> loginByUserName(Student st) {
-		
-		String userName = st.getUserName().toLowerCase();
-		String password = st.getPassword();
-		List<Contents> contents = null;
-		
-		// update student as logged
-		String updateQuery = "update Student set userLogged = 1 where LOWER(username) = ? AND password =?";
-		int updateColumns = jdbcTemplate1.update(updateQuery, userName, password);
-		
-		if (updateColumns == 1) {
-			// retrieve logged user
-			String queryStudent = "select * from Student where LOWER(username) = ? AND password =?";
-
-	        Student student = jdbcTemplate1.queryForObject
-	        		(queryStudent, new Object[]{userName, password}, new StudentRowMapper());
-	        
-	        if (student != null ) {
-	        	//get all the contents
-	        	contents = contentDAO.getContentsByContentIdList(student.getStudentId());
-	        }
-		}
-		return contents;
-	}
-	*/
