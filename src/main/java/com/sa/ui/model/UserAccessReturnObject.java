@@ -10,6 +10,7 @@ public class UserAccessReturnObject {
 	String msgReturned;
 	boolean success;
 	boolean loginSuccess;
+	boolean addContentToUserSuccess;
 	Student student;
 	Tutor tutor;
 

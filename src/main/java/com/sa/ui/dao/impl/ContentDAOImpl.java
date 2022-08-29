@@ -1,16 +1,22 @@
 package com.sa.ui.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sa.ui.dao.ContentDAO;
 import com.sa.ui.model.Contents;
+import com.sa.ui.model.UserAccessReturnObject;
+import com.sa.ui.model.UserContent;
 import com.sa.ui.rowmapper.ContentsRowMapper;
+import com.sa.ui.rowmapper.UserContentRowMapper;
 
 
 @Transactional
@@ -22,25 +28,27 @@ public class ContentDAOImpl  implements ContentDAO{
 	@Qualifier("jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 	
-	@Override
+	/*@Override
 	public List<Contents> getAllContentsById(long id) {
 		
 		String query = "SELECT * FROM contents WHERE contentId = ?";
+		@SuppressWarnings("deprecation")
 		List<Contents> contents = jdbcTemplate.query(
 		  query, new Object[] { id}, new ContentsRowMapper());
 
 		return contents;
 		
-	}
-	
-	public List<Contents> getContentsByContentIdList(long studentId) {
+	}*/
+	// get contents list from usercontent table with student id
+	public List<Contents> getContentsByStudentId(long studentId) {
 		
-		String query = "SELECT * FROM contents c "
-				+ "inner join student_content sc "
-				+ "on c.contentId = sc.contentId "
-				+ "inner join student s "
-				+ "on s.studentId = sc.studentId "
-				+ " and s.studentId=?";
+		String query = "SELECT * FROM CONTENTS c "
+				+ "inner join USERCONTENT sc "
+				+ "on c.CONTENTID = sc.CONTENTID "
+				+ "inner join USER u "
+				+ "on u.USERID = sc.USERID "
+				+ " and u.USERID=?";
+		@SuppressWarnings("deprecation")
 		List<Contents> contents = jdbcTemplate.query(
 		  query, new Object[] { studentId }, new ContentsRowMapper());
 
@@ -53,42 +61,35 @@ public class ContentDAOImpl  implements ContentDAO{
 		desc = desc.toLowerCase();
 		
 		String query = "select * from contents where LOWER(contentDesc) LIKE ?";
+		@SuppressWarnings("deprecation")
 		List<Contents> contents = jdbcTemplate.query(
 				query, new Object[] { "%"+desc+ "%" }, new ContentsRowMapper());
 
 		return contents;
 		
 	}
-	
-	/*
+
 	@Override
-	public Boolean insertStudentContent(String userName, long contentId ) {
+	public UserAccessReturnObject addContentToUser(Long userId, Long contentId) {
 		
-		// StudentContent studentContent = new StudentContent();
+		UserAccessReturnObject returnedObject = new UserAccessReturnObject();
 		
-		String queryStudent = "select * from Student where LOWER(username) = ? ";
-		
-		// find user with username
-        Student student = jdbcTemplate.queryForObject
-        		(queryStudent, new Object[]{userName}, new StudentRowMapper());
-				
-		
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("STUDENTID", student.getStudentId());
-		parameters.put("CONTENTID", contentId);
-		    
+		try {
 			
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate1)
-	            .withTableName("STUDENT_CONTENT")
-	            .usingGeneratedKeyColumns("STUDENTID_CONTENT_ID");
-		  
-		Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
-		    
-		if (id >0)
-			return Boolean.TRUE;
-		else 
-			return Boolean.FALSE;
+			final String INSERT_QUERY = "insert into USERCONTENT (USERID, CONTENTID) values (?, ?)";
+			
+			int id = jdbcTemplate.update(INSERT_QUERY, userId, contentId);  
+			
+			if (id == 1) {
+				returnedObject.setAddContentToUserSuccess(true);
+				returnedObject.setMsgReturned("Course added");
+			}
+			
+		} catch (Exception e) {
+			returnedObject.setAddContentToUserSuccess(false);
+			returnedObject.setMsgReturned("Error: Contact Admin");
+		}
+		return returnedObject;
 	}
-	*/
 	
 }

@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class User {
 	
+	Long userId;
 	String firstName;
 	String lastName;
 	String email;
 	String userName;
 	String password;
 	String userType;
-
 }
