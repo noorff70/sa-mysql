@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Contents {
+public class Course {
 
-	private long contentId;
-	private String contentName;
-	private String contentDesc;
+	private long courseId;
+	private String courseName;
+	private String courseDesc;
 	private long tutorId;
 	private long topicId;
 }

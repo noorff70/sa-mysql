@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserContent {
+public class UserCourse {
 	
-	Long userContentId;
-	Long contentId;
+	Long userCourseId;
+	Long courseId;
 	Long userId;
 
 }
