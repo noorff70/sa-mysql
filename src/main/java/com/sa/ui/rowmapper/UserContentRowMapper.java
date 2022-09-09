@@ -4,16 +4,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
-import com.sa.ui.model.UserContent;
+import com.sa.ui.model.UserCourse;
 
-public class UserContentRowMapper implements RowMapper<UserContent>{
+public class UserContentRowMapper implements RowMapper<UserCourse>{
 
 	@Override
-	public UserContent mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public UserCourse mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
-		UserContent userContent = new UserContent();
-		userContent.setUserContentId(userContent.getUserContentId());
-		userContent.setContentId(userContent.getContentId());
+		UserCourse userContent = new UserCourse();
+		userContent.setUserCourseId(userContent.getUserCourseId());
+		userContent.setCourseId(userContent.getCourseId());
 		userContent.setUserId(userContent.getUserId());
 
 		return userContent;

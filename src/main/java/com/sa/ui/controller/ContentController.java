@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sa.ui.model.Contents;
+import com.sa.ui.model.Course;
 import com.sa.ui.model.Student;
 import com.sa.ui.model.UserAccessReturnObject;
-import com.sa.ui.model.UserContent;
-import com.sa.ui.service.ContentService;
+import com.sa.ui.model.UserCourse;
+import com.sa.ui.service.CourseService;
 
 @RestController
 public class ContentController {
@@ -22,7 +22,7 @@ public class ContentController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private ContentService contentService;
+	private CourseService contentService;
 	
 	/*@GetMapping("/ui/getContentListById")
 	public List<Contents> getTopicListById (@RequestParam("CONTENTID") long contentId) {
@@ -33,36 +33,36 @@ public class ContentController {
 	}*/
 	
 	@PostMapping("/ui/getContentsByStudentId")
-	public List<Contents> getContentsByStudentId (@RequestBody Student student) {
+	public List<Course> getContentsByStudentId (@RequestBody Student student) {
 		
-		List <Contents> contentList = contentService.getContentsByStudentId(student.getUserId());
+		List <Course> contentList = contentService.getContentsByStudentId(student.getUserId());
 		return contentList;
 	}
 	
 	@PostMapping("/ui/getContentListByContentDesc")
-	public List<Contents> getTopicListByContentDescription (@RequestBody String desc) {
+	public List<Course> getTopicListByContentDescription (@RequestBody String desc) {
 
-		List<Contents> contentList = contentService.getContentsListByContentDesc(desc);
+		List<Course> contentList = contentService.getContentsListByContentDesc(desc);
 		
 		return contentList;
 	}
 	
 	@GetMapping("/ui/getAllContentList")
-	public List<Contents> getAllContentList () {
+	public List<Course> getAllContentList () {
 
-		List<Contents> contentList = contentService.getContentsListByContentDesc(null);
+		List<Course> contentList = contentService.getContentsListByContentDesc(null);
 		
 		return contentList;
 		
 	}
 	
 	@PostMapping("/ui/addContentToStudent")
-	public UserAccessReturnObject addContentToUser(@RequestBody UserContent content) {
+	public UserAccessReturnObject addContentToUser(@RequestBody UserCourse content) {
 		
-		Long contentId = content.getContentId();
+		Long courseId = content.getCourseId();
 		Long userId = content.getUserId();
 		
-		UserAccessReturnObject returnObject = contentService.addContentToUser(userId, contentId);
+		UserAccessReturnObject returnObject = contentService.addContentToUser(userId, courseId);
 		
 		return returnObject;
 		

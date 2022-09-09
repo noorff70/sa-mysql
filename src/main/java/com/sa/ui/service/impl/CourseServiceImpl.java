@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sa.ui.dao.ContentDAO;
-import com.sa.ui.model.Contents;
+import com.sa.ui.dao.CourseDAO;
+import com.sa.ui.model.Course;
 import com.sa.ui.model.UserAccessReturnObject;
-import com.sa.ui.service.ContentService;
+import com.sa.ui.service.CourseService;
 
 
 
 @Service("contentService")
-public class ContentServiceImpl implements ContentService{
+public class CourseServiceImpl implements CourseService{
 	
 	@Autowired
-	private ContentDAO contentDAO;
+	private CourseDAO courseDAO;
 	
 	/*@Override
 	public List<Contents> getAllContentsById(long id) {
@@ -25,21 +25,21 @@ public class ContentServiceImpl implements ContentService{
 	}*/
 	
 	@Override
-	public List<Contents> getContentsByStudentId(long studentId){
+	public List<Course> getContentsByStudentId(long studentId){
 		
-		return contentDAO.getContentsByStudentId(studentId);
+		return courseDAO.getContentsByStudentId(studentId);
 		
 	}
 	
-	public List<Contents> getContentsListByContentDesc(String desc) {
-		return contentDAO.getContentsListByContentDesc(desc);
+	public List<Course> getContentsListByContentDesc(String desc) {
+		return courseDAO.getContentsListByContentDesc(desc);
 	}
 
 	@Override
 	public UserAccessReturnObject addContentToUser(Long userId, Long contentId) {
 		
 		UserAccessReturnObject userAccessReturnObject =  
-				contentDAO.addContentToUser(userId, Long.valueOf(contentId));
+				courseDAO.addContentToUser(userId, Long.valueOf(contentId));
 		return userAccessReturnObject;
 	}
 
