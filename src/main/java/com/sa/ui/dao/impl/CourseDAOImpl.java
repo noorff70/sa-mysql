@@ -55,7 +55,7 @@ public class CourseDAOImpl  implements CourseDAO{
 		
 		desc = desc.toLowerCase();
 		
-		String query = "select * from course where LOWER(courseDesc) LIKE ?";
+		String query = "select * from course where LOWER(courseDesc) LIKE ? and courseType = 'FREE'";
 		@SuppressWarnings("deprecation")
 		List<Course> contents = jdbcTemplate.query(
 				query, new Object[] { "%"+desc+ "%" }, new CourseRowMapper());
