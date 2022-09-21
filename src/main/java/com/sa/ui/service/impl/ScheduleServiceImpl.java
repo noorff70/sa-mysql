@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sa.ui.dao.ScheduleDAO;
 import com.sa.ui.model.ScheduleCourse;
+import com.sa.ui.model.Tutor;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.service.ScheduleService;
 
@@ -22,11 +23,17 @@ public class ScheduleServiceImpl implements ScheduleService{
 	public UserAccessReturnObject getSchedule(long courseId) {
 		
 		UserAccessReturnObject accessObject = new UserAccessReturnObject();
-		List<ScheduleCourse> ua = new ArrayList<ScheduleCourse>();
+		List<ScheduleCourse> scheduelCourses = new ArrayList<ScheduleCourse>();
 		
-		ua = scheduleDAO.getAvailableDates(courseId);
+		scheduelCourses = scheduleDAO.getAvailableDates(courseId);
 		
-		accessObject.setScheduleCourse(ua);
+		Tutor tutor = new Tutor();
+		if (scheduelCourses != null) {
+			tutor.setFirstName(scheduelCourses.get(0).getTutorFName());
+			tutor.setLastName(scheduelCourses.get(0).getTutorLName());
+		}
+		accessObject.setTutor(tutor);
+		accessObject.setScheduleCourse(scheduelCourses);
 		
 		return accessObject;
 	}

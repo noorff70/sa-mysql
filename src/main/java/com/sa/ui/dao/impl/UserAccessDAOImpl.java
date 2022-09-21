@@ -92,7 +92,8 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 				student.setUserName(dbUser.getUserName());
 				student.setEmail(dbUser.getEmail());
 				student.setUserId(dbUser.getUserId());
-				
+				student.setFirstName(dbUser.getFirstName());
+				student.setLastName(dbUser.getLastName());
 				returnObject.setStudent(student);
 				return returnObject;
 			}
