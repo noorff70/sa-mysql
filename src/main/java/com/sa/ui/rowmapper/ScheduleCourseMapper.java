@@ -24,6 +24,7 @@ public class ScheduleCourseMapper implements RowMapper<ScheduleCourse>{
 		sc.setCourseName(rs.getString("courseName"));
 		sc.setScheduleId(rs.getLong("scheduleId"));
 		sc.setSchedule(rs.getDate("scheduleDate"));
+		//sc.setUserId(rs.getLong("userId"));
 		
 		return sc;
 	}

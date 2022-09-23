@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sa.ui.model.Course;
+import com.sa.ui.model.ScheduleCourse;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.service.ScheduleService;
 
@@ -25,6 +26,18 @@ public class ScheduleController {
 		UserAccessReturnObject userAccess = scheduleService.getSchedule(course.getCourseId());
 		
 		return userAccess;
+	}
+	
+	@PostMapping("/ui/registerSchedule")
+	public UserAccessReturnObject registerSchedule (@RequestBody ScheduleCourse sc) {
+		
+		UserAccessReturnObject userAccess = new UserAccessReturnObject();
+		
+		String response = scheduleService.registerSchedule(sc);
+		userAccess.setMsgReturned(response);
+		
+		return userAccess;
+		
 	}
 
 }

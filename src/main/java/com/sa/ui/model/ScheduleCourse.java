@@ -13,6 +13,7 @@ public class ScheduleCourse {
 	private long scheduleId;
 	private long courseId;
 	private long tutorId;
+	private long userId;
 	private Date schedule;
 	private String tutorFName;
 	private String tutorLName;
