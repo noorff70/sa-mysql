@@ -21,9 +21,20 @@ spring:
     name: sa-mysql   #current service name to be used by the eureka server
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://localhost:3306/studyaid
-    username: root
-    password: root    
+    #1. localhost in devlopment machine - working
+    #jdbc-url: jdbc:mysql://localhost:3306/studyaid
+    #username: root
+    #password: root
+    
+    #2. Docker desktop at windows -working
+    #jdbc-url: jdbc:mysql://host.docker.internal:3306/studyaid
+    #username: root
+    #password: root
+    
+    #3. Docker desktop AWS
+    jdbc-url: jdbc:mysql://host.docker.internal:3306/studyaid
+    username: admin
+    password: studyaid     
    
     
 management:
