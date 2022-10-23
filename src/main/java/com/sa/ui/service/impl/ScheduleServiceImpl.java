@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sa.ui.dao.ScheduleDAO;
 import com.sa.ui.model.ScheduleCourse;
+import com.sa.ui.model.ScheduleUser;
 import com.sa.ui.model.Tutor;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.service.ScheduleService;
@@ -36,6 +37,21 @@ public class ScheduleServiceImpl implements ScheduleService{
 		accessObject.setScheduleCourse(scheduelCourses);
 		
 		return accessObject;
+	}
+
+	@Override
+	public String registerSchedule(ScheduleCourse sc) {
+		
+		ScheduleUser su = new ScheduleUser();
+		su.setScheduleId(sc.getScheduleId());
+		su.setUserId(sc.getUserId());
+		
+		int returnVal = scheduleDAO.registerSchedule(su);
+		
+		if (returnVal == 0)
+			return "Please contact Admin- Registration Failure";
+		else 
+			return "Successfully registered for Event. Wait for a confirmation Result.";
 	}
 
 }

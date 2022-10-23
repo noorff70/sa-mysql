@@ -78,23 +78,29 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 		    parameters.put("USERNAME", user.getUserName());
 		    parameters.put("PASSWORD", user.getPassword());
 		    
-		    String sql = "SELECT * FROM USER WHERE USERNAME = ? AND PASSWORD = ?";
+		    String sql = "SELECT * FROM USER WHERE USERNAME = ?";
 
 		    // check if user exists
-			List<User> userList = jdbcTemplate.query (sql,  new UserRowMapper(), user.getUserName(), user.getPassword());
+			List<User> userList = jdbcTemplate.query (sql,  new UserRowMapper(), user.getUserName());
 			
 			if (userList.size() == 1) {
-				returnObject.setLoginSuccess(true);
 				
 				User dbUser = userList.get(0);
 				
-				Student student = new Student();
-				student.setUserName(dbUser.getUserName());
-				student.setEmail(dbUser.getEmail());
-				student.setUserId(dbUser.getUserId());
-				student.setFirstName(dbUser.getFirstName());
-				student.setLastName(dbUser.getLastName());
-				returnObject.setStudent(student);
+				if (dbUser.getPassword().equals(user.getPassword())) {
+					Student student = new Student();
+					student.setUserName(dbUser.getUserName());
+					student.setEmail(dbUser.getEmail());
+					student.setUserId(dbUser.getUserId());
+					student.setFirstName(dbUser.getFirstName());
+					student.setLastName(dbUser.getLastName());
+					returnObject.setStudent(student);
+					returnObject.setLoginSuccess(true);
+				} else {
+					returnObject.setLoginSuccess(false);
+					returnObject.setMsgReturned("NO_MATCH");
+				}
+				
 				return returnObject;
 			}
 			else {
