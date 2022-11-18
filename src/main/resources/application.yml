@@ -10,7 +10,10 @@ eureka:
     #prefer-ip-address: true 
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      # localhost
+       defaultZone: http://localhost:8761/eureka/
+      # docker
+      # defaultZone: http://sa-discovery:8761/eureka/
     healthcheck:
       enabled: true
     lease:
@@ -22,9 +25,9 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     #1. localhost in devlopment machine - working
-    #jdbc-url: jdbc:mysql://localhost:3306/studyaid
-    #username: root
-    #password: root
+    jdbc-url: jdbc:mysql://localhost:3306/studyaid
+    username: root
+    password: root
     
     #2. Docker desktop at windows -working
     #jdbc-url: jdbc:mysql://host.docker.internal:3306/studyaid
@@ -32,9 +35,9 @@ spring:
     #password: root
     
     #3. Docker desktop AWS
-    jdbc-url: jdbc:mysql://host.docker.internal:3306/studyaid
-    username: admin
-    password: studyaid     
+    #jdbc-url: jdbc:mysql://host.docker.internal:3306/studyaid
+    #username: admin
+    #password: studyaid     
    
     
 management:
