@@ -110,7 +110,7 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 			
 		} catch (Exception e) {
 			returnObject.setSuccess(false);
-			returnObject.setMsgReturned("Please contact Admin ");
+			returnObject.setMsgReturned("Please contact Admin " + e.getMessage());
 			}	
 		return returnObject;
 	}

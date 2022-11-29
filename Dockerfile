@@ -16,6 +16,8 @@ COPY ${JAR_FILE} sa-mysql.jar
 # java -jar /opt/app/app.jar
 ENTRYPOINT ["java","-jar","sa-mysql.jar"]
 
+EXPOSE 8083
+
 # Make docker file
 # C:\dev\repos\studyaid\sa-mysql>docker build -t sa-mysql .
 
@@ -24,3 +26,6 @@ ENTRYPOINT ["java","-jar","sa-mysql.jar"]
 
 #run docker file
 #C:\dev\repos\studyaid\sa-mysql>docker run -d -p 8080:8080 -t sa-mysql
+
+#Yes set the env variable using ARG NAME_OF_ENV_VARIABLE in dockerfile
+#docker build -t nameOfImage --build-arg NAME_OF_ENV_VARIABLE=ADD_YOUR_VALUE_TO_PASS .
