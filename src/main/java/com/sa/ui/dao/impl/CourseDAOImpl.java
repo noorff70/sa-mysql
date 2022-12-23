@@ -37,12 +37,12 @@ public class CourseDAOImpl  implements CourseDAO{
 	// get contents list from usercontent table with student id
 	public List<Course> getContentsByStudentId(long studentId) {
 		
-		String query = "SELECT * FROM COURSE c "
-				+ "inner join USERCOURSE sc "
-				+ "on c.COURSEID = sc.COURSEID "
-				+ "inner join USER u "
-				+ "on u.USERID = sc.USERID "
-				+ " and u.USERID=?";
+		String query = "SELECT * FROM course c "
+				+ "inner join usercourse sc "
+				+ "on c.courseId = sc.courseId "
+				+ "inner join user u "
+				+ "on u.userId = sc.userId "
+				+ " and u.userId=?";
 		@SuppressWarnings("deprecation")
 		List<Course> contents = jdbcTemplate.query(
 		  query, new Object[] { studentId }, new CourseRowMapper());
@@ -71,7 +71,7 @@ public class CourseDAOImpl  implements CourseDAO{
 		
 		try {
 			
-			final String INSERT_QUERY = "insert into USERCOURSE (USERID, COURSEID) values (?, ?)";
+			final String INSERT_QUERY = "insert into usercourse (userId, courseId) values (?, ?)";
 			
 			int id = jdbcTemplate.update(INSERT_QUERY, userId, courseId);  
 			

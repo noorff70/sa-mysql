@@ -29,11 +29,11 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 	@Override
 	public List<ScheduleCourse> getAvailableDates(long courseId) {
 		
-		String query = "SELECT T.TUTORID, T.TUTORFNAME, T.TUTORLNAME, C.COURSEID, C.COURSENAME,"
-				+ "S.SCHEDULEID, S.SCHEDULEDATE "
-				+ "FROM TUTOR T, COURSE C, SCHEDULE S, SCHEDULECOURSE SC "
-				+ "WHERE C.COURSEID = ? AND T.TUTORID = SC.TUTORID AND C.COURSEID = SC.COURSEID AND S.SCHEDULEID = SC.SCHEDULEID "
-				+ "AND S.SCHEDULEDATE>CURDATE()";
+		String query = "SELECT t.tutorId, t.tutorFName, t.tutorLName, c.courseId, c.courseName,"
+				+ "s.scheduleId, s.scheduleDate "
+				+ "FROM tutor t, course c, schedule s, schedulecourse sc "
+				+ "WHERE c.courseId = ? AND t.tutorId = sc.tutorId AND c.courseId = sc.courseId AND s.scheduleId = sc.scheduleId "
+				+ "AND s.scheduleDate>CURDATE()";
 		
 		
 		@SuppressWarnings("deprecation")

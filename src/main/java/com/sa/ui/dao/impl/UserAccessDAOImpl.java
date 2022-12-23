@@ -38,7 +38,7 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 		    parameters.put("USERNAME", user.getUserName());
 		    parameters.put("EMAIL", user.getEmail());
 		    
-		    String sql = "SELECT * FROM USER WHERE USERNAME = ? ";
+		    String sql = "SELECT * FROM user WHERE userName = ? ";
 
 		    // check if user exists
 			List<User> userList = jdbcTemplate.query (sql,  new UserRowMapper(), user.getUserName());
@@ -50,8 +50,8 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 			}
 			else {
 				SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-		                .withTableName("USER")
-		                .usingGeneratedKeyColumns("USERID");
+		                .withTableName("user")
+		                .usingGeneratedKeyColumns("userId");
 				
 				Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
 				
@@ -78,7 +78,7 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 		    parameters.put("USERNAME", user.getUserName());
 		    parameters.put("PASSWORD", user.getPassword());
 		    
-		    String sql = "SELECT * FROM USER WHERE USERNAME = ?";
+		    String sql = "SELECT * FROM user WHERE userName = ?";
 
 		    // check if user exists
 			List<User> userList = jdbcTemplate.query (sql,  new UserRowMapper(), user.getUserName());
