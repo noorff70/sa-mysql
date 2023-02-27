@@ -16,7 +16,7 @@ COPY ${JAR_FILE} sa-mysql.jar
 # java -jar /opt/app/app.jar
 ENTRYPOINT ["java","-jar","sa-mysql.jar"]
 
-EXPOSE 8083
+#EXPOSE 8082
 
 # Make docker file
 # C:\dev\repos\studyaid\sa-mysql>docker build -t sa-mysql .

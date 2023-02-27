@@ -1,0 +1,32 @@
+#default port where the service will be started
+server:
+  port: 8082 
+
+#tells about the Eureka server details and its refresh time 
+eureka:
+  instance:
+    statusPageUrl: http://0.0.0.0:${server.port}/info
+    healthCheckUrl: http://0.0.0.0:${server.port}/health
+    homePageUrl: http://0.0.0.0:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://0.0.0.0:8761/eureka/
+ 
+spring:   
+  application:
+    name: sa-mysql   #current service name to be used by the eureka server
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://host.docker.internal:3306/studyaid
+    username: admin
+    password: studyaid     
+   
+    
+management:
+  security:
+    enabled: false  #disable the spring security on the management endpoints like /env, /refresh etc. 
+    
+
+#logging:
+#  level:
+#    com.sa.display: DEBUG
