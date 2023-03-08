@@ -17,7 +17,7 @@ spring:
   application:
     name: sa-mysql   #current service name to be used by the eureka server
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
+    #driverClassName: com.mysql.cj.jdbc.Driver
     #1. localhost in devlopment machine - working
     jdbc-url: jdbc:mysql://localhost:3306/studyaid
     username: root
