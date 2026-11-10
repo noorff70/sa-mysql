@@ -15,7 +15,7 @@ public class ScheduleUserRowMapper implements RowMapper<ScheduleUser>{
 		ScheduleUser sUser = new ScheduleUser();
 		sUser.setUserId(rs.getLong("userId"));
 		sUser.setScheduleId(rs.getLong("scheduleId"));
-		sUser.setSlId(rs.getLong("slId"));
+		sUser.setSlId(rs.getObject("slId", Long.class));   // keeps NULL as null instead of 0
 				
 		
 		return sUser;

@@ -18,21 +18,15 @@ spring:
     name: sa-mysql   #current service name to be used by the eureka server
   datasource:
     #driverClassName: com.mysql.cj.jdbc.Driver
-    #1. localhost in devlopment machine - working
-    jdbc-url: jdbc:mysql://localhost:3306/studyaid
-    username: root
-    password: root
-    
-    #2. Docker desktop at windows -working
-    #jdbcUrl: jdbc:mysql://172.17.0.1:3306/studyaid
-    #username: root
-    #password: root
-    
-    #3. Docker desktop AWS
-    #jdbc-url: jdbc:mysql://host.docker.internal:3306/studyaid
-    #username: admin
-    #password: studyaid     
-   
+    # Credentials come from environment variables, never from this file.
+    #   STUDYAID_DB_PASSWORD  required - password of the MySQL app user
+    #   STUDYAID_DB_USER      optional - defaults to the app user "studyaid"
+    #   STUDYAID_DB_URL       optional - in Docker use jdbc:mysql://host.docker.internal:3306/studyaid
+    # studyaid-schema\create-app-db-user.ps1 creates the user and can set the variables.
+    jdbc-url: ${STUDYAID_DB_URL:jdbc:mysql://localhost:3306/studyaid}
+    username: ${STUDYAID_DB_USER:studyaid}
+    password: ${STUDYAID_DB_PASSWORD}
+
     
 management:
   security:

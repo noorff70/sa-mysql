@@ -29,7 +29,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 		scheduelCourses = scheduleDAO.getAvailableDates(courseId);
 		
 		Tutor tutor = new Tutor();
-		if (scheduelCourses != null) {
+		// query() returns an empty list, never null, when a course has no future schedules
+		if (!scheduelCourses.isEmpty()) {
 			tutor.setFirstName(scheduelCourses.get(0).getTutorFName());
 			tutor.setLastName(scheduelCourses.get(0).getTutorLName());
 		}
@@ -48,10 +49,12 @@ public class ScheduleServiceImpl implements ScheduleService{
 		
 		int returnVal = scheduleDAO.registerSchedule(su);
 		
-		if (returnVal == 0)
-			return "Please contact Admin- Registration Failure";
-		else 
+		if (returnVal == ScheduleDAO.REGISTERED)
 			return "Successfully registered for Event. Wait for a confirmation Result.";
+		else if (returnVal == ScheduleDAO.ALREADY_REGISTERED)
+			return "You are already registered for this Event.";
+		else
+			return "Please contact Admin- Registration Failure";
 	}
 
 }

@@ -12,4 +12,5 @@ public class Course {
 	private String courseDesc;
 	private long tutorId;
 	private long topicId;
+	private String courseType;   // FREE or PAID
 }

@@ -2,8 +2,12 @@ package com.sa.ui.dao.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,74 +21,72 @@ import com.sa.ui.rowmapper.CourseRowMapper;
 @Transactional
 @Repository
 public class CourseDAOImpl  implements CourseDAO{
-	
-	
+
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	@Qualifier("jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
-	
-	/*@Override
-	public List<Contents> getAllContentsById(long id) {
-		
-		String query = "SELECT * FROM contents WHERE courseId = ?";
-		@SuppressWarnings("deprecation")
-		List<Contents> contents = jdbcTemplate.query(
-		  query, new Object[] { id}, new ContentsRowMapper());
 
-		return contents;
-		
-	}*/
-	// get contents list from usercontent table with student id
+	// courses the user is enrolled in (usercourse)
 	public List<Course> getContentsByStudentId(long studentId) {
-		
-		String query = "SELECT * FROM course c "
-				+ "inner join usercourse sc "
-				+ "on c.courseId = sc.courseId "
-				+ "inner join user u "
-				+ "on u.userId = sc.userId "
-				+ " and u.userId=?";
-		@SuppressWarnings("deprecation")
-		List<Course> contents = jdbcTemplate.query(
-		  query, new Object[] { studentId }, new CourseRowMapper());
 
-		return contents;
-		
+		String query = "SELECT c.* FROM course c "
+				+ "INNER JOIN usercourse uc ON uc.courseId = c.courseId "
+				+ "WHERE uc.userId = ?";
+
+		return jdbcTemplate.query(query, new CourseRowMapper(), studentId);
 	}
-	
-	public List<Course> getContentsListByContentDesc(String desc) {
-		
-		desc = desc.toLowerCase();
-		
-		String query = "select * from course where LOWER(courseDesc) LIKE ? and courseType = 'FREE'";
-		@SuppressWarnings("deprecation")
-		List<Course> contents = jdbcTemplate.query(
-				query, new Object[] { "%"+desc+ "%" }, new CourseRowMapper());
 
-		return contents;
-		
+	// FREE courses whose description contains desc; a null or blank desc returns all FREE courses
+	public List<Course> getContentsListByContentDesc(String desc) {
+
+		if (desc == null || desc.trim().isEmpty()) {
+			return jdbcTemplate.query(
+					"SELECT * FROM course WHERE courseType = 'FREE'", new CourseRowMapper());
+		}
+
+		// the _ai_ci collation already ignores case; escape LIKE wildcards typed by the user
+		String pattern = "%" + escapeLike(desc.trim()) + "%";
+
+		String query = "SELECT * FROM course WHERE courseDesc LIKE ? AND courseType = 'FREE'";
+		return jdbcTemplate.query(query, new CourseRowMapper(), pattern);
+	}
+
+	private static String escapeLike(String text) {
+		return text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
 	}
 
 	@Override
 	public UserAccessReturnObject addContentToUser(Long userId, Long courseId) {
-		
+
 		UserAccessReturnObject returnedObject = new UserAccessReturnObject();
-		
+		returnedObject.setAddContentToUserSuccess(false);
+
 		try {
-			
+
 			final String INSERT_QUERY = "insert into usercourse (userId, courseId) values (?, ?)";
-			
-			int id = jdbcTemplate.update(INSERT_QUERY, userId, courseId);  
-			
-			if (id == 1) {
+
+			int rows = jdbcTemplate.update(INSERT_QUERY, userId, courseId);
+
+			if (rows == 1) {
 				returnedObject.setAddContentToUserSuccess(true);
 				returnedObject.setMsgReturned("Course added");
+			} else {
+				returnedObject.setMsgReturned("Error: Contact Admin");
 			}
-			
+
+		} catch (DuplicateKeyException e) {
+			returnedObject.setMsgReturned("Already enrolled in this course");
+		} catch (DataIntegrityViolationException e) {
+			// foreign key: the user or the course does not exist
+			LOG.warn("addContentToUser: unknown user {} or course {}", userId, courseId);
+			returnedObject.setMsgReturned("Course or user not found");
 		} catch (Exception e) {
-			returnedObject.setAddContentToUserSuccess(false);
+			LOG.error("addContentToUser failed for user " + userId + ", course " + courseId, e);
 			returnedObject.setMsgReturned("Error: Contact Admin");
 		}
 		return returnedObject;
 	}
-	
+
 }

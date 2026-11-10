@@ -9,6 +9,8 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /*
  * db configuration. 
@@ -26,5 +28,11 @@ public class WebConfig implements WebMvcConfigurer{
     public JdbcTemplate jdbcTemplate1(@Qualifier("db") DataSource ds) {
      return new JdbcTemplate(ds);
     }
-    
+
+    // hashes user passwords (user.password holds a 60-char BCrypt hash)
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+     return new BCryptPasswordEncoder();
+    }
+
 }

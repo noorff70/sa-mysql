@@ -1,12 +1,12 @@
 package com.sa.ui.dao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,41 +19,42 @@ import com.sa.ui.rowmapper.ScheduleCourseMapper;
 @Transactional
 @Repository
 public class ScheduleDAOImpl implements ScheduleDAO{
-	
+
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	@Qualifier("jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public List<ScheduleCourse> getAvailableDates(long courseId) {
-		
-		String query = "SELECT t.tutorId, t.tutorFName, t.tutorLName, c.courseId, c.courseName,"
-				+ "s.scheduleId, s.scheduleDate "
-				+ "FROM tutor t, course c, schedule s, schedulecourse sc "
-				+ "WHERE c.courseId = ? AND t.tutorId = sc.tutorId AND c.courseId = sc.courseId AND s.scheduleId = sc.scheduleId "
-				+ "AND s.scheduleDate>CURDATE()";
-		
-		
-		@SuppressWarnings("deprecation")
-		List<ScheduleCourse> sc = jdbcTemplate.query(
-				query, new Object[] { courseId }, new ScheduleCourseMapper());
-		
-		return sc;
+
+		String query = "SELECT t.tutorId, t.tutorFName, t.tutorLName, c.courseId, c.courseName, "
+				+ "s.scheduleId, s.scheduleDate, s.scheduleTime "
+				+ "FROM schedulecourse sc "
+				+ "INNER JOIN course c ON c.courseId = sc.courseId "
+				+ "INNER JOIN tutor t ON t.tutorId = sc.tutorId "
+				+ "INNER JOIN schedule s ON s.scheduleId = sc.scheduleId "
+				+ "WHERE sc.courseId = ? AND s.scheduleDate > CURDATE() "
+				+ "ORDER BY s.scheduleDate, s.scheduleTime";
+
+		return jdbcTemplate.query(query, new ScheduleCourseMapper(), courseId);
 	}
-	
+
+	// returns REGISTERED, ALREADY_REGISTERED or FAILED
 	public int registerSchedule(ScheduleUser su) {
-		
-		// returns 1 for success and 0 for failure
+
 		try {
-			return jdbcTemplate.update(
+			int rows = jdbcTemplate.update(
 	                "insert into scheduleuser (userId, scheduleId) values(?,?)", su.getUserId(), su.getScheduleId());
-		}catch(Exception e) {
-			LOG.error("ScheduleDAOImpl- registerSchedule" + e.getMessage());
+			return rows == 1 ? REGISTERED : FAILED;
+		} catch (DuplicateKeyException e) {
+			return ALREADY_REGISTERED;
+		} catch (Exception e) {
+			LOG.error("registerSchedule failed for user " + su.getUserId() + ", schedule " + su.getScheduleId(), e);
 		}
-		return 0;
-		
+		return FAILED;
+
 	}
 
 }

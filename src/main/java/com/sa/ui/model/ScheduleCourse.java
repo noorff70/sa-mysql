@@ -15,6 +15,7 @@ public class ScheduleCourse {
 	private long tutorId;
 	private long userId;
 	private Date schedule;
+	private String scheduleTime;   // "HH:mm:ss", or null when no time is set
 	private String tutorFName;
 	private String tutorLName;
 	private String courseName;

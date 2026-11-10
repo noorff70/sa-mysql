@@ -1,0 +1,8 @@
+# Shared settings. Environment-specific settings live in:
+#   application-localhost.yml  - running on this PC, or in Docker Desktop
+#   application-aws.yml        - AWS
+# Pick one with SPRING_PROFILES_ACTIVE (env var) or --spring.profiles.active=aws.
+# Without either, the localhost profile is used.
+spring:
+  profiles:
+    default: localhost

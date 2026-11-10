@@ -9,6 +9,6 @@ public class ScheduleUser {
 	
 	long scheduleId;
 	long userId;
-	long slId;
+	Long slId;   // nullable column
 
 }
