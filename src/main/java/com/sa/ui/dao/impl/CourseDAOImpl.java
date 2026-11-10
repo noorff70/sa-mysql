@@ -33,7 +33,8 @@ public class CourseDAOImpl  implements CourseDAO{
 
 		String query = "SELECT c.* FROM course c "
 				+ "INNER JOIN usercourse uc ON uc.courseId = c.courseId "
-				+ "WHERE uc.userId = ?";
+				+ "WHERE uc.userId = ? "
+				+ "ORDER BY c.courseName";
 
 		return jdbcTemplate.query(query, new CourseRowMapper(), studentId);
 	}
@@ -51,6 +52,19 @@ public class CourseDAOImpl  implements CourseDAO{
 
 		String query = "SELECT * FROM course WHERE courseDesc LIKE ? AND courseType = 'FREE'";
 		return jdbcTemplate.query(query, new CourseRowMapper(), pattern);
+	}
+
+	// all courses (FREE and PAID) whose description contains desc; a null or blank desc returns
+	// every course. Same behaviour as sa-mongo's /mongo/getCourseListByCourseDesc.
+	public List<Course> getCourseListByCourseDesc(String desc) {
+
+		if (desc == null || desc.trim().isEmpty()) {
+			return jdbcTemplate.query("SELECT * FROM course ORDER BY courseName", new CourseRowMapper());
+		}
+
+		String pattern = "%" + escapeLike(desc.trim()) + "%";
+		return jdbcTemplate.query("SELECT * FROM course WHERE courseDesc LIKE ? ORDER BY courseName",
+				new CourseRowMapper(), pattern);
 	}
 
 	private static String escapeLike(String text) {

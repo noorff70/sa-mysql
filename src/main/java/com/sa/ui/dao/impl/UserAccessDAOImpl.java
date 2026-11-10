@@ -139,7 +139,8 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 				}
 			}
 			else {
-				returnObject.setMsgReturned("User not Found");
+				// same text as sa-mongo; the Angular login page shows it as is
+				returnObject.setMsgReturned("No User found");
 			}
 
 		} catch (Exception e) {
@@ -149,6 +150,16 @@ public class UserAccessDAOImpl implements UserAccessDAO{
 			returnObject.setMsgReturned("Please contact Admin");
 		}
 		return returnObject;
+	}
+
+	@Override
+	public Long findUserIdByUserName(String userName) {
+		if (userName == null || userName.trim().isEmpty()) {
+			return null;
+		}
+		List<Long> ids = jdbcTemplate.queryForList(
+				"SELECT userId FROM user WHERE userName = ?", Long.class, userName);
+		return ids.isEmpty() ? null : ids.get(0);
 	}
 
 	/*

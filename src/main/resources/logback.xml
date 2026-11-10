@@ -2,17 +2,24 @@
 
 <configuration>
 
-  <!--   <property name="LOG_PATH" value="./log/sa-mysql.log"/> -->
-  <!--  	<property name="LOG_PATH" value="c:/temp/sa-mysql.log"/> -->
+    <!-- Log file location: set LOG_PATH (env var or -DLOG_PATH=...) to change it,
+         e.g. c:/temp/sa-mysql.log. Defaults to logs/sa-mysql.log in the working directory. -->
+    <property name="LOG_FILE" value="${LOG_PATH:-logs/sa-mysql.log}"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+        </encoder>
+    </appender>
 
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}</file>
+        <file>${LOG_FILE}</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <!-- each archived file, size max 10MB -->
+            <!-- each archived file, size max 5MB -->
             <maxFileSize>5MB</maxFileSize>
-            <!-- total size of all archive files, if total size > 10MB, it will delete old archived file -->
+            <!-- total size of all archive files; older archives are deleted beyond this -->
             <totalSizeCap>10MB</totalSizeCap>
             <!-- 60 days to keep -->
             <maxHistory>60</maxHistory>
@@ -23,11 +30,15 @@
         </encoder>
     </appender>
 
-    <logger name="com.sa.mysql" level="error" additivity="false">
+    <!-- this service's own code (package com.sa.ui): info and above -->
+    <logger name="com.sa.ui" level="info" additivity="false">
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE-ROLLING"/>
     </logger>
 
-    <root level="error">
+    <!-- libraries (Spring, Hikari, Eureka...): warnings and errors -->
+    <root level="warn">
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE-ROLLING"/>
     </root>
 

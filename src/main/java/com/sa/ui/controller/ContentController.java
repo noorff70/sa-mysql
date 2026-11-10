@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sa.ui.model.Course;
+import com.sa.ui.model.RequestObject;
 import com.sa.ui.model.Student;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.model.UserCourse;
@@ -63,8 +64,23 @@ public class ContentController {
 		Long userId = content.getUserId();
 		
 		UserAccessReturnObject returnObject = contentService.addContentToUser(userId, courseId);
-		
+
 		return returnObject;
-		
+
+	}
+
+	/*
+	 * The two endpoints below take and return the same JSON as sa-mongo's
+	 * /mongo/getCourseListByCourseDesc and /mongo/addCourseToUser, so the Angular app can
+	 * switch between MongoDB and MySQL with environment.dataApi only.
+	 */
+	@PostMapping("/ui/getCourseListByCourseDesc")
+	public List<Course> getCourseListByCourseDesc (@RequestBody RequestObject req) {
+		return contentService.getCourseListByCourseDesc(req.getCourseDescription());
+	}
+
+	@PostMapping("/ui/addCourseToUser")
+	public UserAccessReturnObject addCourseToUser(@RequestBody UserCourse content) {
+		return contentService.addCourseToUser(content);
 	}
 }

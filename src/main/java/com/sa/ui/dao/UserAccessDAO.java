@@ -7,5 +7,7 @@ public interface UserAccessDAO {
 	
 	public UserAccessReturnObject registerUser(User user);
 	public UserAccessReturnObject loginUser(User user);
+	// userId for a user name, or null when there is no such user
+	public Long findUserIdByUserName(String userName);
 
 }

@@ -10,5 +10,6 @@ public interface CourseDAO {
 	//public List<Contents> getAllContentsById(long id);
 	public List<Course> getContentsByStudentId(long studentId);
 	public List<Course> getContentsListByContentDesc(String desc);
+	public List<Course> getCourseListByCourseDesc(String desc);
 	public UserAccessReturnObject addContentToUser(Long userId, Long contendId) ;
 }
