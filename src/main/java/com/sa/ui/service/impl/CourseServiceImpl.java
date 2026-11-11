@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sa.ui.dao.CourseDAO;
+import com.sa.ui.dao.LessonDAO;
 import com.sa.ui.dao.UserAccessDAO;
 import com.sa.ui.model.Course;
+import com.sa.ui.model.Lesson;
 import com.sa.ui.model.Student;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.model.UserCourse;
@@ -24,6 +26,14 @@ public class CourseServiceImpl implements CourseService{
 
 	@Autowired
 	private UserAccessDAO userAccessDAO;
+
+	@Autowired
+	private LessonDAO lessonDAO;
+
+	@Override
+	public Lesson getLessonByContentId(long courseId) {
+		return lessonDAO.getLessonByCourseId(courseId);
+	}
 
 	@Override
 	public List<Course> getContentsByStudentId(long studentId){

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sa.ui.dao.CourseDAO;
+import com.sa.ui.dao.TutorDAO;
 import com.sa.ui.dao.UserAccessDAO;
+import com.sa.ui.model.Tutor;
 import com.sa.ui.model.User;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.service.UserAccessService;
@@ -33,6 +35,20 @@ public class UserAccessServiceImpl implements UserAccessService{
 					courseDAO.getContentsByStudentId(result.getStudent().getUserId()));
 		}
 		return result;
+	}
+
+	@Autowired
+	private TutorDAO tutorDAO;
+
+	@Override
+	public Tutor findTutorByTutorId(String tutorKey) {
+		Tutor tutor = tutorDAO.findByTutorKey(tutorKey);
+		if (tutor == null) {
+			// sa-mongo returned null here, which made the Angular page fail on returnValue.firstName
+			tutor = new Tutor();
+			tutor.setUserName(tutorKey);
+		}
+		return tutor;
 	}
 
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sa.ui.model.RequestObject;
+import com.sa.ui.model.Tutor;
 import com.sa.ui.model.User;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.service.UserAccessService;
@@ -36,6 +38,12 @@ public class UserAccessController {
 	
 		UserAccessReturnObject returnObject = accessService.loginUser(user);
 		return returnObject;
+	}
+
+	// tutor profile for the instructor-led course page (was /mongo/findTutorByTutorId)
+	@PostMapping("/ui/findTutorByTutorId")
+	public Tutor findTutorByTutorId(@RequestBody RequestObject request) {
+		return accessService.findTutorByTutorId(request.getTutorId());
 	}
 
 }

@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sa.ui.model.Course;
+import com.sa.ui.model.Lesson;
 import com.sa.ui.model.RequestObject;
 import com.sa.ui.model.Student;
 import com.sa.ui.model.UserAccessReturnObject;
@@ -24,6 +26,12 @@ public class ContentController {
 	
 	@Autowired
 	private CourseService contentService;
+
+	// lesson page content; same JSON as /mongo/getLessonByContentId, empty lists for a course without content
+	@GetMapping("/ui/getLessonByContentId")
+	public Lesson getLessonByContentId(@RequestParam("CONTENTID") long courseId) {
+		return contentService.getLessonByContentId(courseId);
+	}
 	
 	/*@GetMapping("/ui/getContentListById")
 	public List<Contents> getTopicListById (@RequestParam("CONTENTID") long contentId) {

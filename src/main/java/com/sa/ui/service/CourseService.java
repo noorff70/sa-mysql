@@ -3,6 +3,7 @@ package com.sa.ui.service;
 import java.util.List;
 
 import com.sa.ui.model.Course;
+import com.sa.ui.model.Lesson;
 import com.sa.ui.model.UserAccessReturnObject;
 import com.sa.ui.model.UserCourse;
 
@@ -16,5 +17,8 @@ public interface CourseService {
 	// sa-mongo compatible (used by the Angular app when environment.dataApi = 'mysql')
 	public List<Course> getCourseListByCourseDesc(String desc);
 	public UserAccessReturnObject addCourseToUser(UserCourse userCourse);
+
+	// lesson page content (was /mongo/getLessonByContentId)
+	public Lesson getLessonByContentId(long courseId);
 
 }
